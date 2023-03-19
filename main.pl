@@ -24,7 +24,7 @@ friend_list(X, Acc, Xs) :-
     !,
     friend_list(X, [Y | Acc], Xs).
 
-friend_list(X, Xs) :- friend_list(X, [], Xs).
+friend_list(X, Xs) :- friend_list(X, [], Xs), !.
 
 count([], Acc, Acc).
 count([_ | Xs], Acc, N) :-
@@ -59,5 +59,4 @@ people_you_may_know(X, N, Y) :-
     friend_list(X, Xs),
     friend_list(Y, Ys),
     count_commons(Xs, Ys, Np),
-    N is Np,
-    \+(X=Y).
+    N is Np.
