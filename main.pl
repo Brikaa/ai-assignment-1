@@ -10,19 +10,21 @@ my_member(X, [X | _]).
 my_member(X, [_ | Ys]) :-
     my_member(X, Ys).
 
-friendList(X, Acc, Acc) :-
+% Uses bidirectional friend relationship
+friend_list(X, Acc, Acc) :-
     \+ (
         is_friend(X, Y),
         \+ my_member(Y,Acc)
     ).
 
-friendList(X, Acc, Xs) :-
+% Uses bidirectional friend relationship
+friend_list(X, Acc, Xs) :-
     is_friend(X, Y),
     \+ my_member(Y, Acc),
     !,
-    friendList(X, [Y | Acc], Xs).
+    friend_list(X, [Y | Acc], Xs).
 
-friendList(X, Xs) :- friendList(X, [], Xs).
+friend_list(X, Xs) :- friend_list(X, [], Xs).
 
 count([], Acc, Acc).
 count([_ | Xs], Acc, N) :-
@@ -30,13 +32,12 @@ count([_ | Xs], Acc, N) :-
     count(Xs, Accp, N).
 count(Xs, N) :- count(Xs, 0, N).
 
-friendListCount(X, N) :-
-    friendList(X, Ys),
+friend_list_count(X, N) :-
+    friend_list(X, Ys),
     count(Ys, Np),
     N is Np.
 
-
-peopleYouMayKnow(X, Y) :-
+people_you_may_know(X, Y) :-
     is_friend(X, Z),
     is_friend(Z, Y),
     \+(X=Y),
