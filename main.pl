@@ -1,6 +1,6 @@
 :- [data].
 
-% The cut operator is not used to generate all lists of friends in queries
+% The cut operator is not used to give all friends (regardless of direction) in queries
 is_friend(X, Y) :-
     friend(X, Y).
 is_friend(X, Y) :-
