@@ -43,17 +43,21 @@ people_you_may_know(X, Y) :-
     \+(X=Y),
     \+is_friend(X, Y).
 
-count_commons(_, [], 0).
-count_commons(Xs, [Y | Ys], N) :-
+count_commons(_, [], Acc, Acc) :- !.
+count_commons(Xs, [Y | Ys], Acc, N) :-
     my_member(Y, Xs),
-    Np is N - 1,
-    count_commons(Xs, Ys, Np).
-count_commons(Xs, [Y | Ys], N) :-
+    !,
+    Accp is Acc + 1,
+    count_commons(Xs, Ys, Accp, N).
+count_commons(Xs, [Y | Ys], Acc, N) :-
     \+my_member(Y, Xs),
-    count_commons(Xs, Ys, N).
+    !,
+    count_commons(Xs, Ys, Acc, N).
+count_commons(Xs, Ys, N) :- count_commons(Xs, Ys, 0, N).
 
 people_you_may_know(X, N, Y) :-
     friend_list(X, Xs),
     friend_list(Y, Ys),
     count_commons(Xs, Ys, Np),
-    N is Np.
+    N is Np,
+    \+(X=Y).
