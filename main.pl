@@ -30,7 +30,7 @@ count([], Acc, Acc).
 count([_ | Xs], Acc, N) :-
     Accp is Acc + 1,
     count(Xs, Accp, N).
-count(Xs, N) :- count(Xs, 0, N).
+count(Xs, N) :- !, count(Xs, 0, N).
 
 friend_list_count(X, N) :-
     friend_list(X, Ys),
@@ -53,7 +53,7 @@ count_commons(Xs, [Y | Ys], Acc, N) :-
     \+my_member(Y, Xs),
     !,
     count_commons(Xs, Ys, Acc, N).
-count_commons(Xs, Ys, N) :- count_commons(Xs, Ys, 0, N).
+count_commons(Xs, Ys, N) :- !, count_commons(Xs, Ys, 0, N).
 
 % people_you_may_know(X, N, Y) :-
 %     friend_list(X, Xs),

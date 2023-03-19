@@ -1,0 +1,10 @@
+is_friend(ahmed, samy).
+is_friend(samy, ahmed).
+
+friend_list(ahmed, [fouad, samy]).
+friend_list(huda, [lamia, aisha, mariam]).
+friend_list_count(ahmed, 2).
+friend_list_count(huda, 3).
+
+people_you_may_know(ahmed, X).
+people_you_may_know(huda, X).
