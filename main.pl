@@ -34,3 +34,11 @@ friendListCount(X, N) :-
     friendList(X, Ys),
     count(Ys, Np),
     N is Np.
+
+
+peopleYouMayKnow(X, Y) :-
+    is_friend(X, Z),
+    is_friend(Z, Y),
+    \+(X=Y),
+    \+is_friend(X, Y).
+
