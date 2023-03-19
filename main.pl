@@ -55,8 +55,8 @@ count_commons(Xs, [Y | Ys], Acc, N) :-
     count_commons(Xs, Ys, Acc, N).
 count_commons(Xs, Ys, N) :- count_commons(Xs, Ys, 0, N).
 
-people_you_may_know(X, N, Y) :-
-    friend_list(X, Xs),
-    friend_list(Y, Ys),
-    count_commons(Xs, Ys, Np),
-    N is Np.
+% people_you_may_know(X, N, Y) :-
+%     friend_list(X, Xs),
+%     friend_list(Y, Ys),
+%     count_commons(Xs, Ys, Np),
+%     N is Np.
