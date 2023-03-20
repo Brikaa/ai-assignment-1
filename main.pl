@@ -6,7 +6,7 @@ is_friend(X, Y) :-
 is_friend(X, Y) :-
     friend(Y, X).
 
-my_member(X, [X | _]) :- !.
+my_member(X, [X | _]).
 my_member(X, [_ | Ys]) :-
     my_member(X, Ys).
 
