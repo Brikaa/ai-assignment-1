@@ -58,3 +58,41 @@ people_you_may_know(X, N, Y) :-
     count_commons(Xs, Ys, Np),
     N =< Np,
     \+(X = Y).
+
+concatenate_friend_lists([], []).
+concatenate_friend_lists([X | Xs], [Y | Ys]) :-
+    friend_list(X, Y),
+    concatenate_friend_lists(Xs, Ys).
+
+my_append([], Ys, Ys).
+my_append([X | Xs], Ys, [X | Zs]) :-
+    my_append(Xs, Ys, Zs).
+
+my_flatten([], []).
+my_flatten([X | Xs], Ys) :-
+    my_flatten(Xs, Zs),
+    my_append(X, Zs, Ys).
+
+remove_duplicates([X | Xs], Ys) :-
+    my_member(X, Xs),
+    remove_duplicates(Xs, Ys).
+remove_duplicates([X | Xs], [X | Ys]) :-
+    \+my_member(X, Xs),
+    remove_duplicates(Xs, Ys).
+remove_duplicates([], []).
+
+remove_friends_and_self(X, [Y | Ys], [Y | Zs]) :-
+    \+is_friend(X, Y),
+    \+(X = Y),
+    remove_friends_and_self(X, Ys, Zs).
+remove_friends_and_self(X, [Y | Ys], Zs) :-
+    (is_friend(X, Y) ; (X = Y)),
+    remove_friends_and_self(X, Ys, Zs).
+remove_friends_and_self(_, [], []).
+
+people_you_may_know_list(X, Xs) :-
+    friend_list(X, Ys),
+    concatenate_friend_lists(Ys, Zs),
+    my_flatten(Zs, Ws),
+    remove_duplicates(Ws, Ps),
+    remove_friends_and_self(X, Ps, Xs).
