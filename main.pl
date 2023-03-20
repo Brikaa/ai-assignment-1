@@ -6,7 +6,7 @@ is_friend(X, Y) :-
 is_friend(X, Y) :-
     friend(Y, X).
 
-my_member(X, [X | _]).
+my_member(X, [X | _]) :- !.
 my_member(X, [_ | Ys]) :-
     my_member(X, Ys).
 
@@ -96,3 +96,28 @@ people_you_may_know_list(X, Xs) :-
     my_flatten(Zs, Ws),
     remove_duplicates(Ws, Ps),
     remove_friends_and_self(X, Ps, Xs).
+
+people_you_may_know_indirect(X, Y) :-
+    is_friend(X, Z),
+    is_friend(Z, W),
+    is_friend(W, Y),
+    \+(is_friend(X, Y)),
+    \+(X=Y),
+    people_you_may_know(X, Y).
+
+people_you_may_know_indirect(X, Y) :-
+    is_friend(X, Z),
+    is_friend(Z, W),
+    people_you_may_know(W, Y),
+    \+(is_friend(X, Y)),
+    \+(X=Y),
+    \+people_you_may_know(X, Y).
+
+% people_you_may_know_indirect(X, Y) :-
+%     is_friend(X, Z),
+%     is_friend(Z, W),
+%     people_you_may_know_indirect(W, Y),
+%     \+(is_friend(X, Y)),
+%     \+(X=Y),
+%     people_you_may_know_list(X, Xs),
+%     \+my_member(Y, Xs).
