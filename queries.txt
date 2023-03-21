@@ -17,3 +17,7 @@ people_you_may_know_list(huda, L). % [hagar, zainab, hend]
 
 people_you_may_know_indirect(ibrahim, X). % mohammed, said, ahmed
 people_you_may_know_indirect(ali, X). % mostafa
+
+people_you_may_know_list(ibrahim, X). % [fouad, samy, omar, khaled]
+people_you_may_know_indirect(marwan, X). % false
+people_you_may_know_indirect(hagar, X). % aisha, khadija, lamia, rokaya, eman, laila
