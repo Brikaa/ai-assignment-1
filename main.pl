@@ -56,14 +56,6 @@ count_commons(Xs, [Y | Ys], Acc, N) :-
     count_commons(Xs, Ys, Acc, N).
 count_commons(Xs, Ys, N) :- count_commons(Xs, Ys, 0, N).
 
-people_you_may_know(X, N, Y) :-
-    friend_list(X, Xs),
-    friend_list(Y, Ys),
-    count_commons(Xs, Ys, Np),
-    N =< Np,
-    \+(X = Y),
-    !.
-
 concatenate_friend_lists([], []).
 concatenate_friend_lists([X | Xs], [Y | Ys]) :-
     friend_list(X, Y),
@@ -95,6 +87,28 @@ remove_friends_and_self(X, [Y | Ys], [Y | Zs]) :-
 remove_friends_and_self(X, [_ | Ys], Zs) :-
     remove_friends_and_self(X, Ys, Zs).
 remove_friends_and_self(_, [], []).
+
+count_occurrences(_, [], 0).
+count_occurrences(X, [X | Xs], N) :-
+    count_occurrences(X, Xs, Np),
+    N is Np + 1, !.
+count_occurrences(X, [Y | Xs], N) :-
+    \+(X=Y),
+    count_occurrences(X, Xs, N).
+
+element_with_n_occurrences([X | Xs], N, X) :-
+    Np is N - 1,
+    count_occurrences(X, Xs, Np).
+element_with_n_occurrences([_ | Xs], N, X) :-
+    count_occurrences(X, Xs, N).
+
+people_you_may_know(X, N, Y) :-
+    friend_list(X, Xs),
+    concatenate_friend_lists(Xs, Ys),
+    my_flatten(Ys, Zs),
+    remove_friends_and_self(X, Zs, Ps),
+    element_with_n_occurrences(Ps, N, Y),
+    !.
 
 people_you_may_know_list(X, Xs) :-
     friend_list(X, Ys),
