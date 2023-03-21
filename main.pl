@@ -103,7 +103,7 @@ people_you_may_know_indirect(X, Y) :-
     is_friend(W, Y),
     \+(is_friend(X, Y)),
     \+(X=Y),
-    people_you_may_know(X, Y).
+    \+people_you_may_know(X, Y).
 
 people_you_may_know_indirect(X, Y) :-
     is_friend(X, Z),
@@ -113,11 +113,10 @@ people_you_may_know_indirect(X, Y) :-
     \+(X=Y),
     \+people_you_may_know(X, Y).
 
-% people_you_may_know_indirect(X, Y) :-
-%     is_friend(X, Z),
-%     is_friend(Z, W),
-%     people_you_may_know_indirect(W, Y),
-%     \+(is_friend(X, Y)),
-%     \+(X=Y),
-%     people_you_may_know_list(X, Xs),
-%     \+my_member(Y, Xs).
+people_you_may_know_indirect(X, Y) :-
+    is_friend(X, Z),
+    is_friend(Z, W),
+    people_you_may_know_indirect(W, Y),
+    \+(is_friend(X, Y)),
+    \+(X=Y),
+    \+people_you_may_know(X, Y).
