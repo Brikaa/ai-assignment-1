@@ -77,6 +77,7 @@ my_flatten([X | Xs], Ys) :-
 
 remove_duplicates([X | Xs], Ys) :-
     my_member(X, Xs),
+    !,
     remove_duplicates(Xs, Ys).
 remove_duplicates([X | Xs], [X | Ys]) :-
     \+my_member(X, Xs),
