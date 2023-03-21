@@ -18,7 +18,6 @@ friend_list(X, Acc, Acc) :-
     ).
 
 % Uses bidirectional friend relationship
-% cut operator is not used because we need backtracking in other rules
 friend_list(X, Acc, Xs) :-
     is_friend(X, Y),
     \+ my_member(Y, Acc),
