@@ -14,3 +14,6 @@ people_you_may_know(huda, 3, X).
 
 people_you_may_know_list(ahmed, L).
 people_you_may_know_list(huda, L).
+
+people_you_may_know_indirect(ibrahim, X). % mohammed, said, ahmed
+people_you_may_know_indirect(ali, X). % mostafa
