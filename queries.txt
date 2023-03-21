@@ -1,19 +1,19 @@
 is_friend(ahmed, samy).
 is_friend(samy, ahmed).
 
-friend_list(ahmed, X).
-friend_list(huda, X).
-friend_list_count(ahmed, X).
-friend_list_count(huda, X).
+friend_list(ahmed, X). % [fouad, samy]
+friend_list(huda, X). % [lamia, aisha, mariam];
+friend_list_count(ahmed, X). % 2
+friend_list_count(huda, X). % 3
 
-people_you_may_know(ahmed, X).
-people_you_may_know(huda, X).
+people_you_may_know(ahmed, X). % mohammed, said, omar, abdullah
+people_you_may_know(huda, X). % hagar, zainab, hend
 
-people_you_may_know(ahmed, 2, X).
-people_you_may_know(huda, 3, X).
+people_you_may_know(ahmed, 2, X). % abdullah
+people_you_may_know(huda, 3, X). % zainab
 
-people_you_may_know_list(ahmed, L).
-people_you_may_know_list(huda, L).
+people_you_may_know_list(ahmed, L). % [mohammed, said, omar, abdullah].
+people_you_may_know_list(huda, L). % [hagar, zainab, hend]
 
 people_you_may_know_indirect(ibrahim, X). % mohammed, said, ahmed
 people_you_may_know_indirect(ali, X). % mostafa

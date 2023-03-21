@@ -42,11 +42,13 @@ people_you_may_know(X, Y) :-
     \+(X=Y),
     \+is_friend(X, Y).
 
-count_commons(_, [], Acc, Acc).
+count_commons(_, [], Acc, Acc) :- !.
 count_commons(Xs, [Y | Ys], Acc, N) :-
     my_member(Y, Xs),
+    !,
     Accp is Acc + 1,
     count_commons(Xs, Ys, Accp, N).
+
 count_commons(Xs, [Y | Ys], Acc, N) :-
     \+my_member(Y, Xs),
     count_commons(Xs, Ys, Acc, N).
