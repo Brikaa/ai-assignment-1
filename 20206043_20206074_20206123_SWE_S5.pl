@@ -11,19 +11,12 @@ my_member(X, [_ | Ys]) :-
     my_member(X, Ys).
 
 % Uses bidirectional friend relationship
-friend_list(X, Acc, Acc) :-
-    \+ (
-        is_friend(X, Y),
-        \+ my_member(Y,Acc)
-    ).
-
-% Uses bidirectional friend relationship
 friend_list(X, Acc, Xs) :-
     is_friend(X, Y),
     \+ my_member(Y, Acc),
     !,
     friend_list(X, [Y | Acc], Xs).
-
+friend_list(_, Acc, Acc).
 friend_list(X, Xs) :- friend_list(X, [], Xs), !.
 
 count([], Acc, Acc).
@@ -84,46 +77,44 @@ count_occurrences(X, [_ | Xs], Acc, N) :-
     count_occurrences(X, Xs, Acc, N).
 count_occurrences(X, Xs, N) :- count_occurrences(X, Xs, 0, N).
 
-people_you_may_know(X, N, Y) :-
+friends_of_friends(X, Ns) :-
     friend_list(X, Xs),
     concatenate_friend_lists(Xs, Ys),
     my_flatten(Ys, Zs),
-    remove_friends_and_self(X, Zs, Ps),
-    count_occurrences(Y, Ps, N), % Will get the y if it occurs >= N
+    remove_friends_and_self(X, Zs, Ns).
+
+people_you_may_know(X, N, Y) :-
+    friends_of_friends(X, Xs),
+    count_occurrences(Y, Xs, N), % Will get the y if it occurs >= N
     !.
 
 people_you_may_know_list(X, Xs) :-
-    friend_list(X, Ys),
-    concatenate_friend_lists(Ys, Zs),
-    my_flatten(Zs, Ws),
-    remove_duplicates(Ws, Ps),
-    remove_friends_and_self(X, Ps, Xs), !.
+    friends_of_friends(X, Ys),
+    remove_duplicates(Ys, Xs),
+    !.
+
+indirect_applicable(X, Acc, Y) :-
+    \+my_member(Y, Acc),
+    \+(is_friend(X, Y)),
+    \+(X=Y),
+    \+people_you_may_know(X, Y).
 
 people_you_may_know_indirect(X, Acc, Y) :-
     is_friend(X, Z),
     is_friend(Z, W),
     is_friend(W, Y),
-    \+my_member(Y, Acc),
-    \+(is_friend(X, Y)),
-    \+(X=Y),
-    \+people_you_may_know(X, Y).
+    indirect_applicable(X, Acc, Y).
 
 people_you_may_know_indirect(X, Acc, Y) :-
     is_friend(X, Z),
     is_friend(Z, W),
-    \+my_member(Y, Acc),
     people_you_may_know(W, Y),
-    \+(is_friend(X, Y)),
-    \+(X=Y),
-    \+people_you_may_know(X, Y).
+    indirect_applicable(X, Acc, Y).
 
 people_you_may_know_indirect(X, Acc, Y) :-
     is_friend(X, Z),
     is_friend(Z, W),
-    \+my_member(Y, Acc),
-    people_you_may_know_indirect(W, [Y | Acc], Y),
-    \+(is_friend(X, Y)),
-    \+(X=Y),
-    \+people_you_may_know(X, Y).
+    indirect_applicable(X, Acc, Y),
+    people_you_may_know_indirect(W, [Y | Acc], Y).
 
 people_you_may_know_indirect(X, Y) :- people_you_may_know_indirect(X, [], Y).
