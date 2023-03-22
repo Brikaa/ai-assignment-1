@@ -16,9 +16,7 @@ friend_list(X, Acc, Xs) :-
     \+ my_member(Y, Acc),
     !,
     friend_list(X, [Y | Acc], Xs).
-
 friend_list(_, Acc, Acc).
-
 friend_list(X, Xs) :- friend_list(X, [], Xs), !.
 
 count([], Acc, Acc).
