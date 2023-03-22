@@ -6,7 +6,7 @@ is_friend(X, Y) :-
 is_friend(X, Y) :-
     friend(Y, X).
 
-my_member(X, [X | _]) :- !.
+my_member(X, [X | _]) :- !. % The branch below assumes X =\= Y
 my_member(X, [_ | Ys]) :-
     my_member(X, Ys).
 
@@ -14,10 +14,10 @@ my_member(X, [_ | Ys]) :-
 friend_list(X, Acc, Xs) :-
     is_friend(X, Y),
     \+ my_member(Y, Acc),
-    !,
+    !, % The branch below assumes either Y is a friend or it is a member in the accumulator
     friend_list(X, [Y | Acc], Xs).
 friend_list(_, Acc, Acc).
-friend_list(X, Xs) :- friend_list(X, [], Xs), !.
+friend_list(X, Xs) :- friend_list(X, [], Xs).
 
 count([], Acc, Acc).
 count([_ | Xs], Acc, N) :-
@@ -27,7 +27,6 @@ count(Xs, N) :- count(Xs, 0, N).
 
 friend_list_count(X, N) :-
     friend_list(X, Ys),
-    !,
     count(Ys, Np),
     N is Np.
 
@@ -40,8 +39,7 @@ people_you_may_know(X, Y) :-
 concatenate_friend_lists([], []).
 concatenate_friend_lists([X | Xs], [Y | Ys]) :-
     friend_list(X, Y),
-    concatenate_friend_lists(Xs, Ys),
-    !.
+    concatenate_friend_lists(Xs, Ys).
 
 my_append([], Ys, Ys).
 my_append([X | Xs], Ys, [X | Zs]) :-
@@ -54,7 +52,7 @@ my_flatten([X | Xs], Ys) :-
 
 remove_duplicates([X | Xs], Ys) :-
     my_member(X, Xs),
-    !,
+    !, % The branch below checks that X is not a member of Xs
     remove_duplicates(Xs, Ys).
 remove_duplicates([X | Xs], [X | Ys]) :-
     \+my_member(X, Xs),
@@ -64,8 +62,10 @@ remove_duplicates([], []).
 remove_friends_and_self(X, [Y | Ys], [Y | Zs]) :-
     \+is_friend(X, Y),
     \+(X = Y),
+    !, % The branch below assumes X = Y or Y is a friend
     remove_friends_and_self(X, Ys, Zs).
 remove_friends_and_self(X, [_ | Ys], Zs) :-
+    !, % The branch below is the base case
     remove_friends_and_self(X, Ys, Zs).
 remove_friends_and_self(_, [], []).
 
@@ -86,12 +86,11 @@ friends_of_friends(X, Ns) :-
 people_you_may_know(X, N, Y) :-
     friends_of_friends(X, Xs),
     count_occurrences(Y, Xs, N), % Will get the y if it occurs >= N
-    !.
+    !. % The requirements state that only ONE should be retrieved
 
 people_you_may_know_list(X, Xs) :-
     friends_of_friends(X, Ys),
-    remove_duplicates(Ys, Xs),
-    !.
+    remove_duplicates(Ys, Xs).
 
 indirect_applicable(X, Acc, Y) :-
     \+my_member(Y, Acc),
