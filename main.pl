@@ -99,31 +99,28 @@ people_you_may_know_list(X, Xs) :-
     remove_duplicates(Ws, Ps),
     remove_friends_and_self(X, Ps, Xs), !.
 
+indirect_applicable(X, Acc, Y) :-
+    \+my_member(Y, Acc),
+    \+(is_friend(X, Y)),
+    \+(X=Y),
+    \+people_you_may_know(X, Y).
+
 people_you_may_know_indirect(X, Acc, Y) :-
     is_friend(X, Z),
     is_friend(Z, W),
     is_friend(W, Y),
-    \+my_member(Y, Acc),
-    \+(is_friend(X, Y)),
-    \+(X=Y),
-    \+people_you_may_know(X, Y).
+    indirect_applicable(X, Acc, Y).
 
 people_you_may_know_indirect(X, Acc, Y) :-
     is_friend(X, Z),
     is_friend(Z, W),
-    \+my_member(Y, Acc),
     people_you_may_know(W, Y),
-    \+(is_friend(X, Y)),
-    \+(X=Y),
-    \+people_you_may_know(X, Y).
+    indirect_applicable(X, Acc, Y).
 
 people_you_may_know_indirect(X, Acc, Y) :-
     is_friend(X, Z),
     is_friend(Z, W),
-    \+my_member(Y, Acc),
-    people_you_may_know_indirect(W, [Y | Acc], Y),
-    \+(is_friend(X, Y)),
-    \+(X=Y),
-    \+people_you_may_know(X, Y).
+    indirect_applicable(X, Acc, Y),
+    people_you_may_know_indirect(W, [Y | Acc], Y).
 
 people_you_may_know_indirect(X, Y) :- people_you_may_know_indirect(X, [], Y).
